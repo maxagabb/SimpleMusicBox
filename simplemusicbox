@@ -6,6 +6,7 @@ if [ -n "$WAYLAND_DISPLAY" ]; then
 	dmenu=dmenu-wl
 else
 	dmenu=dmenu
+	#dmenu=mydmenu
 fi
 
 fetchAlbum() {
