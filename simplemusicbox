@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# Feed a music directory into mpv and present choice to shuffle the music within 
+
+if [ -n "$WAYLAND_DISPLAY" ]; then
+	dmenu=dmenu-wl
+else
+	dmenu=dmenu
+fi
+
+fetchAlbum() {
+	DIR="$HOME/Music"
+	allMusic="All of it"
+
+	choice="$(find "$DIR" -type d -printf '%P\n' 2>/dev/null | \
+		sort | \
+		sed "1s/.*/$allMusic/" | \
+		$dmenu -i -l 8 -p "___   Select an album: ")" || exit 1
+	playlist="$DIR/$choice"
+
+	shuffle=$(printf "Yes\\nNo" | $dmenu -i -p "Shuffle?") || exit 1
+	[ "$shuffle" = "Yes" ] && shuffle="--shuffle"
+
+	[ ! -d "$playlist" ] && playlist="$DIR" 
+	mpv $shuffle "$playlist"
+}
+
+fetchAlbum
