@@ -9,14 +9,22 @@ else
 	#dmenu=mydmenu
 fi
 
+killit () {
+	for pid in $(pgrep musicbox); do pkill -P $pid; done
+	exit 1
+}
+
 fetchAlbum() {
 	DIR="$HOME/Music"
 	allMusic="All of it"
 
 	choice="$(find "$DIR" -type d -printf '%P\n' 2>/dev/null | \
 		sort | \
-		sed "1s/.*/$allMusic/" | \
+		sed "1s/.*/$allMusic/; $ a kill it" | \
 		$dmenu -i -l 8 -p "___   Select an album: ")" || exit 1
+	[ "$choice" = "kill it" ] && killit
+
+
 	playlist="$DIR/$choice"
 
 	shuffle=$(printf "Yes\\nNo" | $dmenu -i -p "Shuffle?") || exit 1
