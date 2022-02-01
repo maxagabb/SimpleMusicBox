@@ -9,28 +9,44 @@ else
 	#dmenu=mydmenu
 fi
 
-killit () {
+killmusic () {
 	for pid in $(pgrep musicbox); do pkill -P $pid; done
 	exit 1
+}
+
+playlists() {
+	[ -z "$choice" ] && exit 1
+	case "$choice" in
+		"playlist0")  playlist="https://www.youtube.com/playlist?list=xxx";;
+		"playlist1")  playlist="https://www.youtube.com/playlist?list=xxx";;
+		"playlist2")  playlist="https://www.youtube.com/playlist?list=xxx";;
+	esac
 }
 
 fetchAlbum() {
 	DIR="$HOME/Music"
 	allMusic="All of it"
+	killit="Kill it"
 
 	choice="$(find "$DIR" -type d -printf '%P\n' 2>/dev/null | \
 		sort | \
-		sed "1s/.*/$allMusic/; $ a kill it" | \
+		sed "1s/.*/$allMusic/; $ a playlist0\nplaylist1\nplaylist2\n$killit" | \
 		$dmenu -i -l 8 -p "___   Select an album: ")" || exit 1
-	[ "$choice" = "kill it" ] && killit
 
+	# Kill the music
+	[ "$choice" = "$killit" ] && killmusic
 
+	# Get music directory
 	playlist="$DIR/$choice"
+	[ "$choice" = "$allMusic" ] && playlist="$DIR"
 
+	# Fetch YouTube playlist
+	[ ! -d "$playlist" ] && playlists
+
+	# Choose to shuffle
 	shuffle=$(printf "Yes\\nNo" | $dmenu -i -p "Shuffle?") || exit 1
 	[ "$shuffle" = "Yes" ] && shuffle="--shuffle"
 
-	[ ! -d "$playlist" ] && playlist="$DIR" 
 	mpv $shuffle "$playlist"
 }
 
