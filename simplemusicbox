@@ -9,12 +9,12 @@ else
 	#dmenu=mydmenu
 fi
 
-killmusic () {
+killmusic() {
 	for pid in $(pgrep musicbox); do pkill -P $pid; done
 	exit 1
 }
 
-playlists() {
+playlists() { 
 	[ -z "$choice" ] && exit 1
 	case "$choice" in
 		"playlist0")  playlist="https://www.youtube.com/playlist?list=xxx";;
@@ -23,7 +23,7 @@ playlists() {
 	esac
 }
 
-fetchAlbum() {
+fetchAlbum() { 
 	DIR="$HOME/Music"
 	allMusic="All of it"
 	killit="Kill it"
@@ -47,7 +47,8 @@ fetchAlbum() {
 	shuffle=$(printf "Yes\\nNo" | $dmenu -i -p "Shuffle?") || exit 1
 	[ "$shuffle" = "Yes" ] && shuffle="--shuffle"
 
-	mpv $shuffle "$playlist"
+	mpv --ytdl-raw-options-append=cookies-from-browser=firefox \
+		--loop-file=no $shuffle "$playlist"
 }
 
 fetchAlbum
