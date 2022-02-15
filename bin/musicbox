@@ -48,6 +48,7 @@ fetchAlbum() {
 	[ "$shuffle_choice" = "Yes" ] && shuffle="--shuffle"
 
 	mpv --ytdl-raw-options-append=cookies-from-browser=firefox \
+		--script-opts=dmenu-playlist-music_osc=true \
 		--loop-file=no $shuffle "$playlist"
 }
 

@@ -2,6 +2,16 @@
 
 local mp = require 'mp'
 
+local opts = {
+	music_osc=""
+}
+
+(require 'mp.options').read_options(opts, "dmenu-playlist")
+
+if opts.music_osc == "" then
+	opts.music_osc = false
+end
+
 local function exec(args, stdin)
     local command = {
         name = "subprocess",
@@ -65,10 +75,16 @@ local function show_menu()
     return
 end
 
-mp.observe_property("pause", "bool", function(name, val)
-    mp.commandv("script-message", "osc-visibility", val and "always" or "never", "no-osd")
-    mp.osd_message(" ", 0.001)
-end)
+
+if opts.music_osc then
+	mp.observe_property("pause", "bool", function(name, val)
+	    mp.commandv("script-message", "osc-visibility", val and "always" or "never", "no-osd")
+	    mp.osd_message(" ", 0.001)
+	end)
+else
+	mp.commandv("script-message", "osc-visibility", "never", "no-osd")
+end
+
 
 -- keybind to launch menu
 mp.add_key_binding("F8", "dmenu-playlist", show_menu)
