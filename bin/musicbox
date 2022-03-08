@@ -2,13 +2,6 @@
 
 # Feed a music directory into mpv and present choice to shuffle the music within 
 
-if [ -n "$WAYLAND_DISPLAY" ]; then
-	dmenu=dmenu-wl
-else
-	dmenu=dmenu
-	#dmenu=mydmenu
-fi
-
 killmusic() {
 	for pid in $(pgrep musicbox); do pkill -P $pid; done
 	exit 1
@@ -20,6 +13,7 @@ playlists() {
 		"playlist0")  playlist="https://www.youtube.com/playlist?list=xxx";;
 		"playlist1")  playlist="https://www.youtube.com/playlist?list=xxx";;
 		"playlist2")  playlist="https://www.youtube.com/playlist?list=xxx";;
+		*)        notify-send "No matches" && exit 1 ;;
 	esac
 }
 
@@ -31,7 +25,7 @@ fetchAlbum() {
 	choice="$(find "$DIR" -type d -printf '%P\n' 2>/dev/null | \
 		sort | \
 		sed "1s/.*/$allMusic/; $ a playlist0\nplaylist1\nplaylist2\n$killit" | \
-		$dmenu -i -l 8 -p "___   Select an album: ")" || exit 1
+		dmenu-session -i -l 8 -p "___   Select an album: ")" || exit 1
 
 	# Kill the music
 	[ "$choice" = "$killit" ] && killmusic
@@ -44,7 +38,7 @@ fetchAlbum() {
 	[ ! -d "$playlist" ] && playlists
 
 	# Choose to shuffle
-	shuffle_choice=$(printf "Yes\\nNo" | $dmenu -i -p "Shuffle?") || exit 1
+	shuffle_choice=$(printf "Yes\\nNo" | dmenu-session -i -p "Shuffle?") || exit 1
 	[ "$shuffle_choice" = "Yes" ] && shuffle="--shuffle"
 
 	mpv --ytdl-raw-options-append=cookies-from-browser=firefox \

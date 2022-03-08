@@ -1,5 +1,0 @@
-#!/bin/sh
-
-#Useful for consistent dmenu style across scripts
-
-dmenu -sf "#FFF" -sb "#4f43ae" -fn "Inter Medium-16" "$@"

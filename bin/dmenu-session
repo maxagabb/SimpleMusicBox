@@ -1,0 +1,10 @@
+#!/bin/sh
+
+#Make scripts portable between xorg and wayland
+if [ -n "$WAYLAND_DISPLAY" ]; then
+	dmenu=dmenu-wl
+else
+	dmenu=dmenu-dwm
+fi
+
+$dmenu "$@"

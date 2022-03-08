@@ -3,13 +3,18 @@
 
 require "mp.msg"
 
-local function pipeToMenu(path)
-    mp.commandv("run", "dmenuhandler", path);
+local function pipeToScript(command)
+	path = mp.get_property("path")
+	mp.commandv("run", command, path);
 end
 
 function dmusic()
-  path = mp.get_property("path")
-  pipeToMenu(path)
+  pipeToScript("dmenuhandler")
+end
+
+function handle()
+  pipeToScript("linkhandler")
 end
 
 mp.add_key_binding("Ctrl+Shift+d", "dmusic", dmusic)
+mp.add_key_binding("Ctrl+Shift+o", "handle", handle)
