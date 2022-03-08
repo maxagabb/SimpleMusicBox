@@ -16,5 +16,5 @@ function handle()
   pipeToScript("linkhandler")
 end
 
-mp.add_key_binding("Ctrl+Shift+d", "dmusic", dmusic)
-mp.add_key_binding("Ctrl+Shift+o", "handle", handle)
+mp.add_key_binding("Ctrl+d", "dmusic", dmusic)
+mp.add_key_binding("Ctrl+o", "handle", handle)
