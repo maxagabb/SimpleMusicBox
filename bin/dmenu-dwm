@@ -1,0 +1,3 @@
+#!/bin/sh
+
+dmenu -sf "#FFF" -sb "#4f43ae" -fn "Inter Medium-16" "$@"

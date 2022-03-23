@@ -1,0 +1,2 @@
+#!/bin/sh
+bemenu --fn "Inter Medium 20" --tf "#FFFFFF" --hf "#1E90FF" "$@"
