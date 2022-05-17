@@ -221,4 +221,26 @@ function find_and_add_entries()
     add_files_at(pl_current, append[-1])
 end
 
+local function exec(args)
+  local command = {
+    name = "subprocess",
+    detach = true,
+    args = args,
+  }
+  mp.command_native_async(command)
+end
+
+local function new_window()
+  mp.set_property_native("pause", true)
+  local scpath = "~/Desktop/Git/mpv-music-dotfiles/mpv/scripts"
+  local command = {
+    "mpv",
+    "--hwdec=vaapi-copy",
+    "--scripts=".. scpath .. "/autoload.lua:" .. scpath .."/autocrop.lua",
+    mp.get_property("path")
+  }
+  exec(command)
+end
+
+mp.add_key_binding("n", "new-window", new_window)
 mp.register_event("start-file", find_and_add_entries)
