@@ -47,7 +47,7 @@ local function show_menu()
     "-b",
     "-i",
     "-l",
-    "40",
+    "50",
     "-p",
     "___   Search in playlist: "
   }
